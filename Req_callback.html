@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request a Callback  (v1.7)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .callback-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .callback-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .phone-hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .phone-hint::before {
+            content: "💡";
+            margin-right: 5px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px solid #e1e5e9;
+        }
+
+        .checkbox-input {
+            margin-top: 2px;
+            transform: scale(1.2);
+            accent-color: #667eea;
+        }
+
+        .checkbox-label {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.4;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            display: none;
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 480px) {
+            .callback-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .form-header h2 {
+                font-size: 24px;
+            }
+        }
+
+        /* --- phone input live validation styles --- */
+        .form-input.valid {
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.15);
+            background: #fff;
+        }
+        .form-input.invalid {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.12);
+            background: #fff;
+        }
+        .phone-hint .ok { color: #28a745; margin-left: 6px; }
+        .phone-hint .bad { color: #dc3545; margin-left: 6px; }
+
+    </style>
+</head>
+
+<body>
+    <div class="callback-container">
+        <div class="form-header">
+            <h2>📞 Request a Callback</h2>
+            <p>We'll call you back as soon as possible</p>
+        </div>
+
+        <form id="callbackForm">
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input 
+                    type="tel" 
+                    id="phone" 
+                    class="form-input"
+                    placeholder="+4512345678" 
+                    pattern="^\+[1-9]\d{1,14}$" 
+                    required
+                >
+                <div class="phone-hint">
+                    Include country code (Denmark: +45 + 8 digits)
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="recordingConsent" class="checkbox-input">
+                <label for="recordingConsent" class="checkbox-label">
+                    I consent to this call being recorded for quality and training purposes
+                </label>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="btn-text">Request Callback</span>
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <span>Requesting...</span>
+                </div>
+            </button>
+        </form>
+
+        <div class="success-message" id="successMessage">
+            ✅ Callback requested successfully! We'll call you shortly.
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            ❌ <span id="errorText"></span>
+        </div>
+    </div>
+
+
+        <!-- libphonenumber-js "max" bundle: includes all country metadata -->
+<script type="text/javascript" language="javascript" src="https://cdn.jsdelivr.net/npm/libphonenumber-js@1.11.7/bundle/libphonenumber-max.js"></script>
+<script>
+  // --- Live hint + formatting as user types ---
+  const phoneInput = document.getElementById('phone');
+  const phoneHint = document.querySelector('.phone-hint');
+
+  // Converts ISO2 -> flag emoji (e.g., "DK" -> 🇩🇰)
+  function isoToFlag(iso2) {
+    if (!iso2) return '';
+    return iso2
+      .toUpperCase()
+      .replace(/./g, c => String.fromCodePoint(0x1F1A5 + c.charCodeAt(0))); // regional indicator base
+  }
+
+  // ISO2 -> Locale country name (uses browser's Intl API)
+  const regionNames = (typeof Intl !== 'undefined' && Intl.DisplayNames)
+    ? new Intl.DisplayNames(['en'], { type: 'region' })
+    : null;
+
+  function countryLabel(iso2) {
+    if (!iso2) return '';
+    const flag = isoToFlag(iso2);
+    const name = regionNames ? regionNames.of(iso2) : iso2;
+    return `${flag} ${name}`;
+  }
+
+  function resetHint() {
+    phoneHint.textContent = 'Include country code (Denmark: +45 + 8 digits)';
+    phoneInput.classList.remove('valid', 'invalid');
+  }
+
+  function updatePhoneHint() {
+    const raw = phoneInput.value.trim();
+    if (!raw) { resetHint(); return; }
+
+    const { parsePhoneNumberFromString, AsYouType } = window.libphonenumber;
+
+    // Show a "pretty" formatted version as they type (best-effort)
+    const typer = new AsYouType();
+    const pretty = typer.input(raw);
+
+    try {
+      const phone = parsePhoneNumberFromString(raw);
+      if (!phone) {
+        phoneHint.innerHTML = `${pretty || raw} <span class="bad">Invalid</span>`;
+        phoneInput.classList.add('invalid');
+        phoneInput.classList.remove('valid');
+        return;
+      }
+
+      const iso2 = phone.country; // e.g. "DK"
+      const label = countryLabel(iso2);
+      const formatted = phone.formatInternational();
+
+      if (phone.isValid()) {
+        phoneHint.innerHTML = `${label ? label + ' · ' : ''}${formatted} <span class="ok">✓ Valid</span>`;
+        phoneInput.classList.add('valid');
+        phoneInput.classList.remove('invalid');
+      } else {
+        phoneHint.innerHTML = `${label ? label + ' · ' : ''}${formatted || pretty || raw} <span class="bad">Invalid</span>`;
+        phoneInput.classList.add('invalid');
+        phoneInput.classList.remove('valid');
+      }
+    } catch (e) {
+      phoneHint.innerHTML = `${pretty || raw} <span class="bad">Invalid</span>`;
+      phoneInput.classList.add('invalid');
+      phoneInput.classList.remove('valid');
+    }
+  }
+
+  // Wire up events
+  phoneInput.addEventListener('input', updatePhoneHint);
+  phoneInput.addEventListener('blur', updatePhoneHint);
+</script>
+
+    <script>
+  // Country-specific validation rules
+
+  function validatePhoneNumber(raw) {
+    const { parsePhoneNumberFromString } = window.libphonenumber;
+    try {
+      const phone = parsePhoneNumberFromString(raw); // If starts with +, country code is inferred
+      if (!phone) return { valid: false, error: 'Unable to parse phone number' };
+
+      const ok = phone.isValid();
+      if (!ok) {
+        return {
+          valid: false,
+          error: `Invalid number${phone.country ? ` for ${phone.country}` : ''}. Please check the digits.`
+        };
+      }
+
+      return {
+        valid: true,
+        e164: phone.number,                      // +4512345678
+        formatted: phone.formatInternational(), // +45 12 34 56 78
+        country: phone.country,                 // e.g., "DK"
+        cc: phone.countryCallingCode            // e.g., "45"
+      };
+    } catch (e) {
+      return { valid: false, error: e.message || 'Invalid phone number' };
+    }
+  }
+
+  // UI helpers
+  function setBusy(isBusy) {
+    const btn = document.getElementById('submitBtn');
+    const text = document.querySelector('.btn-text');
+    const loading = document.getElementById('loading');
+    btn.disabled = isBusy;
+    text.style.display = isBusy ? 'none' : 'block';
+    loading.style.display = isBusy ? 'flex' : 'none';
+  }
+
+  function showSuccess() {
+    document.getElementById('successMessage').style.display = 'block';
+    document.getElementById('errorMessage').style.display = 'none';
+  }
+
+  function showError(message) {
+    document.getElementById('errorText').textContent = message;
+    document.getElementById('errorMessage').style.display = 'block';
+    document.getElementById('successMessage').style.display = 'none';
+  }
+
+  function startCooldown(seconds) {
+    const btn = document.getElementById('submitBtn');
+    const text = document.querySelector('.btn-text');
+    const loading = document.getElementById('loading');
+
+    // stop spinner, keep disabled
+    loading.style.display = 'none';
+    text.style.display = 'block';
+
+    let remaining = seconds;
+    const originalLabel = 'Request Callback';
+    text.textContent = `Please wait ${remaining}s`;
+
+    const timer = setInterval(() => {
+      remaining -= 1;
+      if (remaining > 0) {
+        text.textContent = `Please wait ${remaining}s`;
+      } else {
+        clearInterval(timer);
+        btn.disabled = false;
+        text.textContent = originalLabel;
+      }
+    }, 1000);
+  }
+
+  document.getElementById('callbackForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    // Hide previous messages
+    document.getElementById('successMessage').style.display = 'none';
+    document.getElementById('errorMessage').style.display = 'none';
+
+    const submitBtn = document.getElementById('submitBtn');
+    const phoneNumber = document.getElementById('phone').value.trim();
+    const recordingConsent = document.getElementById('recordingConsent').checked;
+
+    
+  // In your submit handler, after calling validatePhoneNumber:
+  const validation = validatePhoneNumber(phoneNumber);
+  if (!validation.valid) {
+    showError(validation.error);
+    return;
+  }
+
+  // Use normalized E.164 number:
+  const e164 = validation.e164
+
+
+    // Now lock the UI
+    setBusy(true);
+
+    // Enter in the path for the API created in AWS API Gateway
+    try {
+      const response = await fetch('ENTER API PATH HERE', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phoneNumber: phoneNumber,
+          recordingConsent: recordingConsent ? "YES" : "NO"
+        })
+      });
+
+      if (response.ok) {
+        showSuccess();
+        document.getElementById('callbackForm').reset();
+      } else {
+        const error = await response.json().catch(() => ({}));
+        showError(error.error || 'Please try again');
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      showError('Network error. Please check your connection and try again.');
+    } finally {
+      // Keep disabled for a cooldown, but stop the spinner
+      startCooldown(30); // seconds
+    }
+  });
+</script>
+
+</body>
+</html>

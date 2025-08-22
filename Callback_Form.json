@@ -1,0 +1,246 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "eff3e068-b4f7-4205-9578-21d98a6fe7a5",
+  "Metadata": {
+    "entryPointPosition": {
+      "x": -488.8,
+      "y": 31.2
+    },
+    "ActionMetadata": {
+      "eff3e068-b4f7-4205-9578-21d98a6fe7a5": {
+        "position": {
+          "x": -374.4,
+          "y": 31.2
+        }
+      },
+      "a5e07e8d-076e-4a05-9e30-ff5bd015aa19": {
+        "position": {
+          "x": 148,
+          "y": 480.8
+        }
+      },
+      "b90e1ed8-78f3-44bb-9a07-0d84f8a1ca98": {
+        "position": {
+          "x": -100,
+          "y": 390.4
+        }
+      },
+      "bc04f42a-77c8-48d3-89c6-eeb832222a97": {
+        "position": {
+          "x": -112.8,
+          "y": 35.2
+        }
+      },
+      "92b8a003-fe47-4f4f-810b-aa3239106a65": {
+        "position": {
+          "x": 159.2,
+          "y": 38.4
+        },
+        "conditions": [],
+        "conditionMetadata": [
+          {
+            "id": "8cd55f81-fa1a-4db5-80ba-97a5031f8515",
+            "operator": {
+              "name": "Equals",
+              "value": "Equals",
+              "shortDisplay": "="
+            },
+            "value": "YES"
+          },
+          {
+            "id": "9865aac8-0832-4884-8fd8-caee89a80288",
+            "operator": {
+              "name": "Equals",
+              "value": "Equals",
+              "shortDisplay": "="
+            },
+            "value": "NO"
+          }
+        ]
+      },
+      "67fa3f0e-e3f6-43ee-89d5-10ac219bec64": {
+        "position": {
+          "x": 416,
+          "y": 20.8
+        }
+      },
+      "4c7a53b5-6489-452d-8b0f-7adf8b026553": {
+        "position": {
+          "x": 423.2,
+          "y": 196.8
+        }
+      },
+      "4a1a7fa4-a521-4dac-aa62-4661acf663d9": {
+        "position": {
+          "x": 927.2,
+          "y": 106.4
+        }
+      },
+      "caf760ca-ebe3-4032-a6ee-ca6822b802b0": {
+        "position": {
+          "x": 680,
+          "y": 20.8
+        },
+        "parameters": {
+          "QueueId": {
+            "displayName": "BasicQueue"
+          }
+        },
+        "queue": {
+          "id": "",
+          "text": "BasicQueue"
+        }
+      }
+    },
+    "Annotations": [],
+    "name": "Callback_Form",
+    "description": "",
+    "type": "contactFlow",
+    "status": "PUBLISHED",
+    "hash": {}
+  },
+  "Actions": [
+    {
+      "Parameters": {
+        "FlowLoggingBehavior": "Enabled"
+      },
+      "Identifier": "eff3e068-b4f7-4205-9578-21d98a6fe7a5",
+      "Type": "UpdateFlowLoggingBehavior",
+      "Transitions": {
+        "NextAction": "bc04f42a-77c8-48d3-89c6-eeb832222a97"
+      }
+    },
+    {
+      "Parameters": {},
+      "Identifier": "a5e07e8d-076e-4a05-9e30-ff5bd015aa19",
+      "Type": "DisconnectParticipant",
+      "Transitions": {}
+    },
+    {
+      "Parameters": {
+        "Text": "Invalid number or not dialable"
+      },
+      "Identifier": "b90e1ed8-78f3-44bb-9a07-0d84f8a1ca98",
+      "Type": "MessageParticipant",
+      "Transitions": {
+        "NextAction": "a5e07e8d-076e-4a05-9e30-ff5bd015aa19",
+        "Errors": [
+          {
+            "NextAction": "a5e07e8d-076e-4a05-9e30-ff5bd015aa19",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "CallbackNumber": "$.Attributes.$.Attributes.CustomerPhone"
+      },
+      "Identifier": "bc04f42a-77c8-48d3-89c6-eeb832222a97",
+      "Type": "UpdateContactCallbackNumber",
+      "Transitions": {
+        "NextAction": "92b8a003-fe47-4f4f-810b-aa3239106a65",
+        "Errors": [
+          {
+            "NextAction": "b90e1ed8-78f3-44bb-9a07-0d84f8a1ca98",
+            "ErrorType": "InvalidCallbackNumber"
+          },
+          {
+            "NextAction": "b90e1ed8-78f3-44bb-9a07-0d84f8a1ca98",
+            "ErrorType": "CallbackNumberNotDialable"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "ComparisonValue": "$.Attributes.$.Attributes.recordingConsent"
+      },
+      "Identifier": "92b8a003-fe47-4f4f-810b-aa3239106a65",
+      "Type": "Compare",
+      "Transitions": {
+        "NextAction": "4c7a53b5-6489-452d-8b0f-7adf8b026553",
+        "Conditions": [
+          {
+            "NextAction": "67fa3f0e-e3f6-43ee-89d5-10ac219bec64",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": [
+                "YES"
+              ]
+            }
+          },
+          {
+            "NextAction": "4c7a53b5-6489-452d-8b0f-7adf8b026553",
+            "Condition": {
+              "Operator": "Equals",
+              "Operands": [
+                "NO"
+              ]
+            }
+          }
+        ],
+        "Errors": [
+          {
+            "NextAction": "4c7a53b5-6489-452d-8b0f-7adf8b026553",
+            "ErrorType": "NoMatchingCondition"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "RecordingBehavior": {
+          "RecordedParticipants": [
+            "Agent",
+            "Customer"
+          ],
+          "IVRRecordingBehavior": "Disabled"
+        }
+      },
+      "Identifier": "67fa3f0e-e3f6-43ee-89d5-10ac219bec64",
+      "Type": "UpdateContactRecordingBehavior",
+      "Transitions": {
+        "NextAction": "caf760ca-ebe3-4032-a6ee-ca6822b802b0"
+      }
+    },
+    {
+      "Parameters": {
+        "RecordingBehavior": {
+          "RecordedParticipants": [],
+          "IVRRecordingBehavior": "Disabled"
+        }
+      },
+      "Identifier": "4c7a53b5-6489-452d-8b0f-7adf8b026553",
+      "Type": "UpdateContactRecordingBehavior",
+      "Transitions": {
+        "NextAction": "caf760ca-ebe3-4032-a6ee-ca6822b802b0"
+      }
+    },
+    {
+      "Parameters": {},
+      "Identifier": "4a1a7fa4-a521-4dac-aa62-4661acf663d9",
+      "Type": "DisconnectParticipant",
+      "Transitions": {}
+    },
+    {
+      "Parameters": {
+        "RetryDelaySeconds": "600",
+        "InitialCallDelaySeconds": "5",
+        "MaximumConnectionAttempts": "2",
+        "QueueId": "arn:aws:connect:us-east-1:496416740952:instance/3dad82f5-2e6d-4460-988e-cb9c321315c6/queue/5badc026-3f69-4646-99e2-03275cd5c559"
+      },
+      "Identifier": "caf760ca-ebe3-4032-a6ee-ca6822b802b0",
+      "Type": "CreateCallbackContact",
+      "Transitions": {
+        "NextAction": "4a1a7fa4-a521-4dac-aa62-4661acf663d9",
+        "Errors": [
+          {
+            "NextAction": "4a1a7fa4-a521-4dac-aa62-4661acf663d9",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    }
+  ]
+}
