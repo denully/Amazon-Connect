@@ -9,7 +9,7 @@ To set this up, you will need access to the following:
 
 ## Amazon Connect
 Create a Contact flow (inbound), 
-A very basic test flow can be found here, [template here](https://gitlab.c0urier.net/denully/aws-callback-request/-/blob/main/Callback_Form.json)
+A very basic test flow can be found here, [template here](https://github.com/denully/Amazon-Connect_Callback/blob/main/Callback_Form.json)
  - Start
   - Set logging behavior
    - Check Contact Attributes: User defined/$.Attributes.recordingConsent, Equals: YES,  Equals: NO
@@ -69,7 +69,7 @@ In AWS Lambda:
     }
     ```
  - Create function.
- - Under Code in the newly created Lambda, use the code from the [lambda_function.py](https://gitlab.c0urier.net/denully/aws-callback-request/-/blob/main/lambda_function.py?ref_type=heads) 
+ - Under Code in the newly created Lambda, use the code from the [lambda_function.py](https://github.com/denully/Amazon-Connect_Callback/blob/main/lambda_function.py)
  - Under Code you will need to edit the ID's for Amazon Connect.
  ```
          response = connect.start_outbound_voice_contact(
@@ -121,7 +121,7 @@ Deploy and copy the API URL, It looks like: https://abc123def.execute-api.us-eas
 
 ## Web form (HTML)
 
-In the html code in [Req_callback.html](https://gitlab.c0urier.net/denully/aws-callback-request/-/blob/main/Req_callback.html?ref_type=heads), which can be renamed without any issues.
+In the html code in [Req_callback.html](https://github.com/denully/Amazon-Connect_Callback/blob/main/Req_callback.html), which can be renamed without any issues.
 find the section with: 
 ```
 // Enter in the path for the API created in AWS API Gateway
