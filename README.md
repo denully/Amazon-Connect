@@ -142,3 +142,15 @@ So typing in +451234567 will fail, where +4512345678 will succeed.  It does not 
 Enter a valid number and tick off if you allow recording or not and press Submit request.
 Login to your Amazon Connect CCP (Contact control panel) and make yourself available, if you are part of the queue used for callbacks.
 Shortly after (if not other calls are in the queue) you will receive a call that shortly after will call the number submitted.
+
+## DISCLAIMER !!!!
+
+I am not a professional programmer in any way, this was made by using AWS documentation, my experience with Amazon Connect and the depending AWS services, some HTML from old webdesigner days, as well as some ChatGPT 5.0. :) 
+So i am sure this can be optimized and coding can be minimized, but it is something to develop on and i will also update as i learn more. 
+
+## Roadmap.
+
+No specific roadmap is planned, but my hopes is to add the below at some point.
+- captcha / i am human
+- SMS notifications
+- Cancellation of callback (this will require a different setup though, with DynamoDB, as the current setup cant cancel a callback once it enters the connect queue.
