@@ -151,6 +151,6 @@ So i am sure this can be optimized and coding can be minimized, but it is someth
 ## Roadmap.
 
 No specific roadmap is planned, but my hopes is to add the below at some point.
-- captcha / i am human
+- captcha
 - SMS notifications
 - Cancellation of callback (this will require a different setup though, with DynamoDB, as the current setup cant cancel a callback once it enters the connect queue.
