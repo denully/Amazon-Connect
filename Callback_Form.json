@@ -228,7 +228,7 @@
         "RetryDelaySeconds": "600",
         "InitialCallDelaySeconds": "5",
         "MaximumConnectionAttempts": "2",
-        "QueueId": "arn:aws:connect:us-east-1:496416740952:instance/3dad82f5-2e6d-4460-988e-cb9c321315c6/queue/5badc026-3f69-4646-99e2-03275cd5c559"
+        "QueueId": ""
       },
       "Identifier": "caf760ca-ebe3-4032-a6ee-ca6822b802b0",
       "Type": "CreateCallbackContact",
